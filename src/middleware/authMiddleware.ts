@@ -3,17 +3,9 @@ import { Request, Response, NextFunction, RequestHandler } from "express";
 import dotenv from "dotenv";
 dotenv.config();
 
-interface DecodedToken {
-  _id: string;
-  userID: string;
-  role?: string;
-}
+interface DecodedToken { _id: string; userID: string; role?: string; }
 
-declare module "express-serve-static-core" {
-  interface Request {
-    user?: DecodedToken;
-  }
-}
+declare module "express-serve-static-core" { interface Request { user?: DecodedToken; } }
 
 // Using RequestHandler type to ensure proper typing
 const requireAuth: RequestHandler = async (req, res, next) => {
@@ -53,9 +45,7 @@ const requireAuth: RequestHandler = async (req, res, next) => {
 const requireAdmin: RequestHandler = (req, res, next) => {
   if (req.user && req.user.role === "admin") {
     next();
-  } else {
-    res.status(403).json({ error: "Admin access required!" });
-  }
+  } else { res.status(403).json({ error: "Admin access required!" }); }
 };
 
 export { requireAuth, requireAdmin };
