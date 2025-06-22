@@ -1,6 +1,8 @@
 import express from "express";
 import { Request, Response, NextFunction } from "express";
-import { authMiddleware } from "@kinde-oss/kinde-node-express";
+const { setupKinde, protectRoute, getUser, GrantType } = require("@kinde-oss/kinde-node-express");
+
+
 import dotenv from "dotenv";
 import cookieParser from "cookie-parser";
 import errorHandler from "./middleware/errorHandler";
@@ -20,11 +22,13 @@ const connect = connection;
 //console.log("Database", connect); // logout the connection (1)
 
 //********************** middleware **********************//
+setupKinde(Kinde, app); // Initialize Kinde middleware with the configuration
+
 app.use(express.json());
 app.use(cookieParser());
 app.use(bodyParser.json({ type: 'application/json' })); // for parsing application/json
 app.use(express.urlencoded({ extended: false }));
-app.use(authMiddleware(Kinde));
+// app.use(authMiddleware(Kinde));
 
 
 //********************** Request logging middleware **********************//
